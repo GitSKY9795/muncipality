@@ -3,22 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Municipal Dashboard - Government of India</title>
+    <title>Municipal Issue Reporting System</title>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -29,398 +20,297 @@
     <link rel="stylesheet" href="styles/maps.css">
 </head>
 <body>
-    <!-- Navigation Header -->
-    <header class="header">
-        <div class="header-container">
-            <div class="header-left">
-                <div class="logo">
-                    <i class="fas fa-landmark"></i>
-                    <span>Municipal Dashboard</span>
-                </div>
-                <nav class="main-nav">
-                    <a href="#" class="nav-link active" data-page="dashboard">
-                        <i class="fas fa-tachometer-alt"></i>
-                        Dashboard
-                    </a>
-                    <a href="#" class="nav-link" data-page="maps">
-                        <i class="fas fa-map"></i>
-                        Maps
-                    </a>
-                    <a href="#" class="nav-link" data-page="analytics">
-                        <i class="fas fa-chart-bar"></i>
-                        Analytics
-                    </a>
-                </nav>
+    <!-- Role Selection Modal -->
+    <div id="roleModal" class="role-modal">
+        <div class="role-modal-content">
+            <div class="role-header">
+                <i class="fas fa-city"></i>
+                <h2>Municipal Issue Reporting System</h2>
+                <p>Select your role to continue</p>
             </div>
-            <div class="header-right">
-                <button class="theme-toggle" id="themeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <div class="user-profile">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23FF6B35'/%3E%3Ctext x='16' y='21' text-anchor='middle' fill='white' font-size='14' font-weight='bold'%3EA%3C/text%3E%3C/svg%3E" alt="Admin">
-                    <span>Administrator</span>
-                    <i class="fas fa-chevron-down"></i>
+            <div class="role-options">
+                <div class="role-card" data-role="citizen">
+                    <div class="role-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Citizen</h3>
+                    <p>Report issues in your area and view community problems</p>
+                    <button class="btn btn-primary">Continue as Citizen</button>
+                </div>
+                <div class="role-card" data-role="admin">
+                    <div class="role-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>Admin</h3>
+                    <p>Manage reported issues and oversee municipal operations</p>
+                    <button class="btn btn-secondary">Continue as Admin</button>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Dashboard Page -->
-        <div class="page active" id="dashboard-page">
-            <!-- Quick Stats -->
-            <section class="stats-section">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-city"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 class="stat-number" data-target="4378">0</h3>
-                            <p class="stat-label">Total Municipalities</p>
-                            <span class="stat-change positive">+2.5%</span>
-                        </div>
+    <!-- Main Container -->
+    <div class="main-container" id="mainContainer" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span id="headerTitle">Issue Reporter</span>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 class="stat-number" data-target="140">0</h3>
-                            <p class="stat-label">Crore Population</p>
-                            <span class="stat-change positive">+1.2%</span>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-rupee-sign"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 class="stat-number" data-target="2500">0</h3>
-                            <p class="stat-label">Crore Budget</p>
-                            <span class="stat-change positive">+8.4%</span>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 class="stat-number" data-target="73">0</h3>
-                            <p class="stat-label">% Development Index</p>
-                            <span class="stat-change positive">+3.1%</span>
-                        </div>
+                    <div class="breadcrumb">
+                        <i class="fas fa-home"></i>
+                        <span id="currentSection">Dashboard</span>
                     </div>
                 </div>
-            </section>
-
-            <!-- Charts Section -->
-            <section class="charts-section">
-                <div class="charts-grid">
-                    <!-- Population Distribution Chart -->
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3>Population Distribution by State</h3>
-                            <div class="chart-controls">
-                                <button class="btn-sm">Export</button>
-                            </div>
+                <div class="header-right">
+                    <div class="user-menu">
+                        <div class="user-avatar">
+                            <i class="fas fa-user" id="userIcon"></i>
                         </div>
-                        <div class="chart-container">
-                            <canvas id="populationChart"></canvas>
+                        <div class="user-info">
+                            <span class="user-name" id="userName">User</span>
+                            <span class="user-role" id="userRole">Role</span>
                         </div>
-                    </div>
-
-                    <!-- Budget Allocation Chart -->
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3>Budget Allocation</h3>
-                            <div class="chart-controls">
-                                <select id="budgetPeriod">
-                                    <option value="2024">2024-25</option>
-                                    <option value="2023">2023-24</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="budgetChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Development Progress -->
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3>Development Progress</h3>
-                        </div>
-                        <div class="progress-grid">
-                            <div class="progress-item">
-                                <div class="progress-header">
-                                    <span>Smart City Initiative</span>
-                                    <span class="progress-value">85%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 85%"></div>
-                                </div>
-                            </div>
-                            <div class="progress-item">
-                                <div class="progress-header">
-                                    <span>Digital Infrastructure</span>
-                                    <span class="progress-value">72%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 72%"></div>
-                                </div>
-                            </div>
-                            <div class="progress-item">
-                                <div class="progress-header">
-                                    <span>Waste Management</span>
-                                    <span class="progress-value">68%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 68%"></div>
-                                </div>
-                            </div>
-                            <div class="progress-item">
-                                <div class="progress-header">
-                                    <span>Water Supply</span>
-                                    <span class="progress-value">91%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 91%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Circular Progress Meters -->
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3>Key Performance Indicators</h3>
-                        </div>
-                        <div class="meters-grid">
-                            <div class="meter">
-                                <svg class="meter-svg" width="120" height="120">
-                                    <circle cx="60" cy="60" r="50" fill="none" stroke="#e6e6e6" stroke-width="8"/>
-                                    <circle cx="60" cy="60" r="50" fill="none" stroke="#FF6B35" stroke-width="8" 
-                                            stroke-dasharray="314" stroke-dashoffset="62.8" class="meter-progress"/>
-                                </svg>
-                                <div class="meter-content">
-                                    <span class="meter-value">80%</span>
-                                    <span class="meter-label">Sanitation</span>
-                                </div>
-                            </div>
-                            <div class="meter">
-                                <svg class="meter-svg" width="120" height="120">
-                                    <circle cx="60" cy="60" r="50" fill="none" stroke="#e6e6e6" stroke-width="8"/>
-                                    <circle cx="60" cy="60" r="50" fill="none" stroke="#138808" stroke-width="8" 
-                                            stroke-dasharray="314" stroke-dashoffset="94.2" class="meter-progress"/>
-                                </svg>
-                                <div class="meter-content">
-                                    <span class="meter-value">70%</span>
-                                    <span class="meter-label">Education</span>
-                                </div>
-                            </div>
-                            <div class="meter">
-                                <svg class="meter-svg" width="120" height="120">
-                                    <circle cx="60" cy="60" r="50" fill="none" stroke="#e6e6e6" stroke-width="8"/>
-                                    <circle cx="60" cy="60" r="50" fill="none" stroke="#000080" stroke-width="8" 
-                                            stroke-dasharray="314" stroke-dashoffset="47.1" class="meter-progress"/>
-                                </svg>
-                                <div class="meter-content">
-                                    <span class="meter-value">85%</span>
-                                    <span class="meter-label">Healthcare</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Recent Activities -->
-            <section class="activities-section">
-                <div class="section-header">
-                    <h2>Recent Activities</h2>
-                    <button class="btn-primary">View All</button>
-                </div>
-                <div class="activities-grid">
-                    <div class="activity-card">
-                        <div class="activity-icon">
-                            <i class="fas fa-plus-circle"></i>
-                        </div>
-                        <div class="activity-content">
-                            <h4>New Municipality Added</h4>
-                            <p>Tiruppur Municipal Corporation registered successfully</p>
-                            <span class="activity-time">2 hours ago</span>
-                        </div>
-                    </div>
-                    <div class="activity-card">
-                        <div class="activity-icon">
-                            <i class="fas fa-edit"></i>
-                        </div>
-                        <div class="activity-content">
-                            <h4>Budget Updated</h4>
-                            <p>Pune Municipal Corporation budget revised</p>
-                            <span class="activity-time">5 hours ago</span>
-                        </div>
-                    </div>
-                    <div class="activity-card">
-                        <div class="activity-icon">
-                            <i class="fas fa-chart-bar"></i>
-                        </div>
-                        <div class="activity-content">
-                            <h4>Report Generated</h4>
-                            <p>Monthly performance report for Tamil Nadu</p>
-                            <span class="activity-time">1 day ago</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- Maps Page -->
-        <div class="page" id="maps-page">
-            <!-- Map Controls -->
-            <div class="map-controls">
-                <div class="control-group">
-                    <label for="stateFilter">Filter by State:</label>
-                    <select id="stateFilter">
-                        <option value="">All States</option>
-                        <option value="maharashtra">Maharashtra</option>
-                        <option value="uttar-pradesh">Uttar Pradesh</option>
-                        <option value="tamil-nadu">Tamil Nadu</option>
-                        <option value="karnataka">Karnataka</option>
-                        <option value="gujarat">Gujarat</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="populationFilter">Population Size:</label>
-                    <select id="populationFilter">
-                        <option value="">All Sizes</option>
-                        <option value="large">10L+ Population</option>
-                        <option value="medium">1L-10L Population</option>
-                        <option value="small">Under 1L Population</option>
-                    </select>
-                </div>
-                <button class="btn-primary" id="locateBtn">
-                    <i class="fas fa-location-arrow"></i>
-                    Find My Location
-                </button>
-            </div>
-
-            <!-- Map Container -->
-            <div id="map" class="map-container"></div>
-
-            <!-- Map Legend -->
-            <div class="map-legend">
-                <h4>Legend</h4>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #FF6B35;"></div>
-                    <span>Municipal Corporation</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #138808;"></div>
-                    <span>Municipal Council</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #000080;"></div>
-                    <span>Nagar Panchayat</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analytics Page -->
-        <div class="page" id="analytics-page">
-            <!-- Analytics Controls -->
-            <div class="analytics-controls">
-                <div class="control-group">
-                    <label for="analysisType">Analysis Type:</label>
-                    <select id="analysisType">
-                        <option value="demographic">Demographic Analysis</option>
-                        <option value="financial">Financial Analysis</option>
-                        <option value="development">Development Analysis</option>
-                        <option value="comparative">Comparative Analysis</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="timeRange">Time Range:</label>
-                    <select id="timeRange">
-                        <option value="current">Current Year</option>
-                        <option value="5year">Last 5 Years</option>
-                        <option value="10year">Last 10 Years</option>
-                    </select>
-                </div>
-                <button class="btn-primary" id="generateReport">
-                    <i class="fas fa-file-pdf"></i>
-                    Generate Report
-                </button>
-            </div>
-
-            <!-- Analytics Charts -->
-            <div class="analytics-charts">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3>Trend Analysis</h3>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="trendChart"></canvas>
-                    </div>
-                </div>
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3>Comparative Performance</h3>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="performanceChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Data Table -->
-            <div class="data-table-section">
-                <div class="table-header">
-                    <h3>Municipality Records</h3>
-                    <div class="table-controls">
-                        <input type="text" id="searchInput" placeholder="Search municipalities...">
-                        <button class="btn-secondary" id="exportBtn">
-                            <i class="fas fa-download"></i>
-                            Export
+                        <button class="btn-logout" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
                         </button>
                     </div>
                 </div>
-                <div class="table-container">
-                    <table id="municipalityTable">
-                        <thead>
-                            <tr>
-                                <th>Municipality</th>
-                                <th>State</th>
-                                <th>Population</th>
-                                <th>Budget (Cr)</th>
-                                <th>Development Index</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <!-- Table data will be populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="pagination" id="pagination">
-                    <!-- Pagination will be generated by JavaScript -->
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation" id="navigation">
+            <!-- Navigation will be populated based on role -->
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Dashboard Page -->
+            <div class="page active" id="dashboard-page">
+                <!-- Quick Stats for Citizens/Admin -->
+                <section class="stats-section" id="statsSection">
+                    <!-- Stats will be populated based on role -->
+                </section>
+
+                <!-- Action Section -->
+                <section class="action-section" id="actionSection">
+                    <!-- Actions will be populated based on role -->
+                </section>
+
+                <!-- Issues Display -->
+                <section class="issues-section">
+                    <div class="section-header">
+                        <h2 id="issuesTitle">Recent Issues</h2>
+                        <div class="section-actions">
+                            <button class="btn btn-outline" id="filterBtn">
+                                <i class="fas fa-filter"></i>
+                                Filter
+                            </button>
+                            <button class="btn btn-outline" id="refreshBtn">
+                                <i class="fas fa-sync-alt"></i>
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
+                    <div class="issues-grid" id="issuesGrid">
+                        <!-- Issues will be loaded here -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- Report Issue Page -->
+            <div class="page" id="report-page">
+                <div class="report-container">
+                    <div class="report-header">
+                        <h2>Report an Issue</h2>
+                        <p>Help improve your community by reporting local problems</p>
+                    </div>
+                    <form class="report-form" id="reportForm">
+                        <div class="form-group">
+                            <label for="issueTitle">Issue Title</label>
+                            <input type="text" id="issueTitle" name="title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="issueCategory">Category</label>
+                            <select id="issueCategory" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="roads">Roads & Infrastructure</option>
+                                <option value="water">Water Supply</option>
+                                <option value="sanitation">Sanitation</option>
+                                <option value="electricity">Electricity</option>
+                                <option value="garbage">Garbage Collection</option>
+                                <option value="streetlights">Street Lights</option>
+                                <option value="drainage">Drainage</option>
+                                <option value="parks">Parks & Recreation</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="issueDescription">Description</label>
+                            <textarea id="issueDescription" name="description" rows="4" required placeholder="Describe the issue in detail..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="issueLocation">Location</label>
+                            <input type="text" id="issueLocation" name="location" required placeholder="Enter the location or address">
+                            <button type="button" class="btn btn-outline btn-sm" id="getCurrentLocation">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Use Current Location
+                            </button>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="issuePhoto">Photo (Optional)</label>
+                            <div class="file-upload">
+                                <input type="file" id="issuePhoto" name="photo" accept="image/*">
+                                <label for="issuePhoto" class="file-upload-label">
+                                    <i class="fas fa-camera"></i>
+                                    Upload Photo
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reporterName">Your Name</label>
+                            <input type="text" id="reporterName" name="reporterName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reporterPhone">Phone Number</label>
+                            <input type="tel" id="reporterPhone" name="reporterPhone" required>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline" id="cancelReport">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Submit Report</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <!-- Leaflet JS -->
+            <!-- Issues Map Page -->
+            <div class="page" id="map-page">
+                <div class="map-container">
+                    <div class="map-header">
+                        <h2>Issues Map</h2>
+                        <div class="map-filters">
+                            <select id="mapCategoryFilter">
+                                <option value="">All Categories</option>
+                                <option value="roads">Roads</option>
+                                <option value="water">Water</option>
+                                <option value="sanitation">Sanitation</option>
+                                <option value="electricity">Electricity</option>
+                                <option value="garbage">Garbage</option>
+                                <option value="streetlights">Street Lights</option>
+                                <option value="drainage">Drainage</option>
+                                <option value="parks">Parks</option>
+                            </select>
+                            <select id="mapStatusFilter">
+                                <option value="">All Status</option>
+                                <option value="open">Open</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="resolved">Resolved</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="issuesMap" class="issues-map"></div>
+                </div>
+            </div>
+
+            <!-- Admin Manage Page -->
+            <div class="page" id="manage-page">
+                <div class="manage-container">
+                    <div class="manage-header">
+                        <h2>Manage Issues</h2>
+                        <div class="manage-stats">
+                            <div class="stat-badge">
+                                <span class="stat-number" id="openIssuesCount">0</span>
+                                <span class="stat-label">Open</span>
+                            </div>
+                            <div class="stat-badge">
+                                <span class="stat-number" id="progressIssuesCount">0</span>
+                                <span class="stat-label">In Progress</span>
+                            </div>
+                            <div class="stat-badge">
+                                <span class="stat-number" id="resolvedIssuesCount">0</span>
+                                <span class="stat-label">Resolved</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="manage-filters">
+                        <select id="adminCategoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="roads">Roads & Infrastructure</option>
+                            <option value="water">Water Supply</option>
+                            <option value="sanitation">Sanitation</option>
+                            <option value="electricity">Electricity</option>
+                            <option value="garbage">Garbage Collection</option>
+                            <option value="streetlights">Street Lights</option>
+                            <option value="drainage">Drainage</option>
+                            <option value="parks">Parks & Recreation</option>
+                        </select>
+                        <select id="adminStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="open">Open</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="resolved">Resolved</option>
+                        </select>
+                        <input type="text" id="adminSearchFilter" placeholder="Search issues...">
+                    </div>
+
+                    <div class="issues-table-container">
+                        <table class="issues-table" id="adminIssuesTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                    <th>Reporter</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminIssuesTableBody">
+                                <!-- Issues will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Issue Detail Modal -->
+    <div id="issueModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalIssueTitle">Issue Details</h3>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalIssueContent">
+                <!-- Issue details will be populated here -->
+            </div>
+            <div class="modal-footer" id="modalActions">
+                <!-- Actions will be populated based on role -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
-    <!-- Custom Scripts -->
-    <script src="data/municipalities.js"></script>
-    <script src="data/geographic.js"></script>
-    <script src="scripts/charts.js"></script>
-    <script src="scripts/maps.js"></script>
-    <script src="scripts/analytics.js"></script>
-    <script src="scripts/dashboard.js"></script>
+    <script src="data/issues.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/issue-manager.js"></script>
+    <script src="scripts/map-handler.js"></script>
 </body>
 </html>

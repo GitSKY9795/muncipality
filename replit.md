@@ -1,10 +1,10 @@
-# Municipal Dashboard - Government of India
+# Municipal Issue Reporting System
 
 ## Overview
 
-This is a comprehensive municipal dashboard application designed for the Government of India to visualize and analyze municipal data across Indian states and territories. The application provides interactive maps, advanced analytics, and data visualization capabilities for municipal corporations, councils, and administrative bodies. It features demographic analysis, financial performance tracking, development progress monitoring, and comparative studies across different municipalities.
+This is a comprehensive issue reporting system designed for municipal governments to enable citizens to report local problems and for administrators to manage and resolve them efficiently. The application provides role-based access with separate interfaces for citizens and municipal administrators, featuring issue reporting, interactive maps, status tracking, and comprehensive management tools.
 
-The system is built as a client-side web application using vanilla JavaScript with extensive data visualization capabilities, focusing on Indian administrative boundaries and municipal governance metrics.
+The system is built as a client-side web application using vanilla JavaScript with modern UI components, focusing on community engagement and municipal service delivery improvement.
 
 ## User Preferences
 
@@ -14,53 +14,60 @@ Preferred communication style: Simple, everyday language.
 
 ### Frontend Architecture
 - **Technology Stack**: Vanilla HTML5, CSS3, and JavaScript with no backend dependencies
-- **Module Pattern**: Object-oriented JavaScript classes for different functional areas (Dashboard, Maps, Analytics, Charts)
-- **Component-Based Structure**: Modular CSS and JavaScript components for reusability
+- **Role-Based Access**: Dynamic UI components that adapt based on user role (Citizen/Admin)
+- **Object-Oriented Design**: Main application class (MunicipalApp) with specialized handlers (IssueManager, MapHandler)
+- **Component-Based Structure**: Modular CSS and JavaScript components for reusability and maintainability
 - **Responsive Design**: Mobile-first approach with CSS Grid and Flexbox layouts
-- **Theme System**: Light/dark theme support with CSS custom properties
+- **Modern UI Elements**: Toast notifications, modal dialogs, interactive forms, and dynamic tables
 
 ### Data Management
-- **Static Data Sources**: JavaScript files containing comprehensive municipal data (`municipalities.js`, `geographic.js`)
-- **Client-Side Processing**: All data processing and analytics performed in the browser
-- **No Database**: Pure static data approach suitable for demo/prototype environments
-- **Data Structure**: Structured objects containing Indian administrative data including states, districts, municipalities with geographic coordinates
+- **Issue Data Structure**: Comprehensive issue objects with full lifecycle tracking (reporting, assignment, resolution)
+- **Client-Side Processing**: All data processing and filtering performed in the browser
+- **Dynamic Content**: Real-time updates and filtering without page reloads
+- **Data Categories**: Nine main issue categories (roads, water, sanitation, electricity, garbage, streetlights, drainage, parks, other)
+- **Status Tracking**: Three-state workflow (open, in-progress, resolved) with detailed update histories
 
-### Visualization Framework
-- **Charts**: Chart.js for statistical visualizations and trend analysis
-- **Maps**: Leaflet.js for interactive geographic visualization with OpenStreetMap integration
-- **Advanced Visualizations**: D3.js for custom data visualizations and complex chart types
-- **Geographic Data**: GIS-ready coordinate systems for Indian administrative boundaries
+### Visualization and Mapping
+- **Interactive Maps**: Leaflet.js integration with custom markers, popups, and geographic visualization
+- **Dynamic Filtering**: Real-time map and table filtering by category, status, and search terms
+- **Custom Markers**: Color-coded and animated markers representing different issue types and statuses
+- **Geographic Features**: User location detection, area-based clustering, and location services integration
 
-### Navigation and Routing
-- **Single Page Application**: Client-side navigation without page reloads
-- **Multi-Page Structure**: Separate dedicated pages for Maps and Analytics with shared components
-- **State Management**: Local storage for user preferences and session data
+### Role-Based Functionality
+- **Citizen Interface**: Issue reporting forms, community view, map exploration, and issue tracking
+- **Admin Interface**: Comprehensive issue management, assignment workflows, status updates, and analytics dashboard
+- **Permission Control**: Feature access based on user role with appropriate UI adaptations
+- **Workflow Management**: Assignment to departments, status updates, and resolution tracking
 
 ### UI/UX Design System
 - **Government Color Scheme**: Indian tricolor-inspired palette (Saffron #FF6B35, Green #138808, Navy #000080)
-- **Typography**: Inter and Poppins fonts for modern, accessible design
-- **Icon Systems**: Font Awesome and Material Icons for comprehensive iconography
-- **Accessibility**: WCAG-compliant color contrasts and responsive design patterns
+- **Typography**: Inter font family for modern, accessible design
+- **Icon System**: Font Awesome for comprehensive iconography with contextual usage
+- **Status Colors**: Consistent color coding for issue statuses and priorities
+- **Interactive Elements**: Hover effects, animations, and visual feedback for user actions
 
 ## External Dependencies
 
-### Visualization Libraries
-- **Chart.js**: Statistical charts and data visualization
-- **D3.js**: Advanced data visualizations and custom chart components
-- **Leaflet.js**: Interactive maps and geographic data visualization
+### Mapping and Visualization
+- **Leaflet.js**: Interactive maps with custom markers, popups, and geographic data visualization
+- **OpenStreetMap**: Base map tiles for geographic visualization with marker clustering capabilities
 
 ### UI and Styling
-- **Google Fonts**: Inter and Poppins font families
-- **Font Awesome**: Icon library for UI elements
-- **Material Icons**: Additional icon set for enhanced UI
-
-### Map Services
-- **OpenStreetMap**: Base map tiles for geographic visualization
-- **Leaflet Plugins**: Marker clustering and additional map functionalities
+- **Google Fonts**: Inter font family for modern typography
+- **Font Awesome**: Icon library for UI elements and category representation
 
 ### Browser APIs
-- **Local Storage**: User preferences and theme persistence
-- **Geolocation API**: User location detection for maps
-- **Canvas API**: Chart rendering and data visualization
+- **Geolocation API**: User location detection for map centering and location services
+- **Local Storage**: User role persistence and application state management
+- **File API**: Photo upload handling for issue reporting
 
-Note: The application is designed as a standalone client-side solution with no server dependencies, making it suitable for deployment on static hosting platforms or as a prototype system.
+### Key Features
+- **Role Selection Modal**: Initial user role selection (Citizen/Admin)
+- **Issue Reporting Form**: Comprehensive form with location detection and photo upload
+- **Interactive Map**: Real-time issue visualization with filtering and custom markers
+- **Admin Management**: Full CRUD operations for issue lifecycle management
+- **Status Workflow**: Open → In Progress → Resolved with department assignment
+- **Toast Notifications**: Real-time feedback for user actions
+- **Responsive Design**: Mobile-optimized interface for all screen sizes
+
+Note: The application is designed as a standalone client-side solution with no server dependencies, making it suitable for deployment on static hosting platforms or as a municipal government prototype system.
