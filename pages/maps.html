@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Maps - Municipal Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+    <link rel="stylesheet" href="../styles/maps.css">
+</head>
+<body>
+    <div class="map-page-container">
+        <header class="map-header">
+            <div class="header-content">
+                <h1><i class="fas fa-map"></i> Interactive Municipal Maps</h1>
+                <a href="../index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </header>
+
+        <div class="map-content">
+            <aside class="map-sidebar">
+                <div class="sidebar-section">
+                    <h3>Map Controls</h3>
+                    <div class="control-group">
+                        <label>Map Layer</label>
+                        <select id="mapLayer">
+                            <option value="osm">OpenStreetMap</option>
+                            <option value="satellite">Satellite</option>
+                            <option value="terrain">Terrain</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Data Overlay</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="showPopulation" checked>
+                                <span>Population Density</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="showBudget">
+                                <span>Budget Allocation</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="showDevelopment">
+                                <span>Development Index</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Filters</h3>
+                    <div class="filter-group">
+                        <label>State</label>
+                        <select id="stateFilter">
+                            <option value="">All States</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Municipality Type</label>
+                        <select id="typeFilter">
+                            <option value="">All Types</option>
+                            <option value="corporation">Municipal Corporation</option>
+                            <option value="council">Municipal Council</option>
+                            <option value="panchayat">Nagar Panchayat</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Population Range</label>
+                        <div class="range-input">
+                            <input type="range" id="populationRange" min="0" max="20000000" value="20000000">
+                            <span id="populationValue">20M+</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Selected Municipality</h3>
+                    <div id="municipalityInfo" class="municipality-info">
+                        <p>Click on a municipality marker to view details</p>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="map-main">
+                <div id="fullMap" class="full-map"></div>
+                
+                <div class="map-tools">
+                    <button id="locateUser" class="tool-btn" title="Find My Location">
+                        <i class="fas fa-location-arrow"></i>
+                    </button>
+                    <button id="fullscreen" class="tool-btn" title="Fullscreen">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button id="exportMap" class="tool-btn" title="Export Map">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+
+                <div class="map-legend-full">
+                    <h4>Legend</h4>
+                    <div class="legend-items">
+                        <div class="legend-item">
+                            <div class="legend-marker corporation"></div>
+                            <span>Municipal Corporation</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-marker council"></div>
+                            <span>Municipal Council</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-marker panchayat"></div>
+                            <span>Nagar Panchayat</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Data and Scripts -->
+    <script src="../data/municipalities.js"></script>
+    <script src="../data/geographic.js"></script>
+    <script src="../scripts/maps.js"></script>
+</body>
+</html>

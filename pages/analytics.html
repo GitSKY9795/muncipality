@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Analytics - Municipal Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+</head>
+<body>
+    <div class="analytics-page-container">
+        <header class="analytics-header">
+            <div class="header-content">
+                <h1><i class="fas fa-chart-bar"></i> Advanced Analytics</h1>
+                <a href="../index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </header>
+
+        <div class="analytics-controls-bar">
+            <div class="control-group">
+                <label>Analysis Type</label>
+                <select id="analysisTypeSelect">
+                    <option value="demographic">Demographic Analysis</option>
+                    <option value="financial">Financial Performance</option>
+                    <option value="development">Development Progress</option>
+                    <option value="comparative">Comparative Study</option>
+                    <option value="predictive">Predictive Analytics</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Time Period</label>
+                <select id="timePeriodSelect">
+                    <option value="current">Current Year (2024-25)</option>
+                    <option value="1year">Last 1 Year</option>
+                    <option value="3year">Last 3 Years</option>
+                    <option value="5year">Last 5 Years</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Comparison Base</label>
+                <select id="comparisonSelect">
+                    <option value="state">By State</option>
+                    <option value="population">By Population Size</option>
+                    <option value="budget">By Budget Size</option>
+                    <option value="type">By Municipality Type</option>
+                </select>
+            </div>
+            <button class="btn-primary" id="refreshAnalytics">
+                <i class="fas fa-sync-alt"></i> Refresh Data
+            </button>
+        </div>
+
+        <div class="analytics-content">
+            <!-- Key Metrics Row -->
+            <section class="metrics-row">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-trending-up"></i>
+                    </div>
+                    <div class="metric-data">
+                        <h3 id="growthRate">8.2%</h3>
+                        <p>Annual Growth Rate</p>
+                        <span class="metric-change positive">+1.4%</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <div class="metric-data">
+                        <h3 id="efficiency">76.5</h3>
+                        <p>Efficiency Index</p>
+                        <span class="metric-change positive">+3.2</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="metric-data">
+                        <h3 id="satisfaction">4.2/5</h3>
+                        <p>Citizen Satisfaction</p>
+                        <span class="metric-change positive">+0.3</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="metric-data">
+                        <h3 id="completion">89%</h3>
+                        <p>Project Completion</p>
+                        <span class="metric-change positive">+12%</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Grid -->
+            <section class="analytics-charts-grid">
+                <!-- Trend Analysis Chart -->
+                <div class="chart-card large">
+                    <div class="chart-header">
+                        <h3>Multi-Year Trend Analysis</h3>
+                        <div class="chart-controls">
+                            <button class="btn-sm" onclick="exportChart('trendAnalysisChart')">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trendAnalysisChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Performance Matrix -->
+                <div class="chart-card medium">
+                    <div class="chart-header">
+                        <h3>Performance Matrix</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="performanceMatrix"></canvas>
+                    </div>
+                </div>
+
+                <!-- Budget Distribution -->
+                <div class="chart-card medium">
+                    <div class="chart-header">
+                        <h3>Budget Distribution</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="budgetDistribution"></canvas>
+                    </div>
+                </div>
+
+                <!-- Geographic Heatmap -->
+                <div class="chart-card large">
+                    <div class="chart-header">
+                        <h3>Geographic Performance Heatmap</h3>
+                        <div class="chart-controls">
+                            <select id="heatmapMetric">
+                                <option value="development">Development Index</option>
+                                <option value="population">Population Density</option>
+                                <option value="budget">Budget Per Capita</option>
+                                <option value="satisfaction">Satisfaction Score</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div id="heatmapChart"></div>
+                    </div>
+                </div>
+
+                <!-- Correlation Analysis -->
+                <div class="chart-card medium">
+                    <div class="chart-header">
+                        <h3>Correlation Analysis</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="correlationChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Predictive Model -->
+                <div class="chart-card medium">
+                    <div class="chart-header">
+                        <h3>Growth Prediction</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="predictionChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed Data Table -->
+            <section class="data-analysis-section">
+                <div class="section-header">
+                    <h3>Detailed Municipal Analysis</h3>
+                    <div class="section-controls">
+                        <input type="text" id="analyticsSearch" placeholder="Search municipalities...">
+                        <select id="sortBy">
+                            <option value="name">Sort by Name</option>
+                            <option value="population">Sort by Population</option>
+                            <option value="budget">Sort by Budget</option>
+                            <option value="development">Sort by Development Index</option>
+                        </select>
+                        <button class="btn-primary" id="generateFullReport">
+                            <i class="fas fa-file-pdf"></i> Generate Full Report
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="analyticsTable">
+                        <thead>
+                            <tr>
+                                <th>Municipality</th>
+                                <th>State</th>
+                                <th>Population</th>
+                                <th>Budget (Cr)</th>
+                                <th>Per Capita Budget</th>
+                                <th>Development Index</th>
+                                <th>Growth Rate %</th>
+                                <th>Efficiency Score</th>
+                                <th>Rank</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="analyticsTableBody">
+                            <!-- Data populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination" id="analyticsPagination">
+                    <!-- Pagination controls -->
+                </div>
+            </section>
+
+            <!-- Insights Panel -->
+            <section class="insights-panel">
+                <div class="insights-header">
+                    <h3><i class="fas fa-lightbulb"></i> AI-Powered Insights</h3>
+                </div>
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <div class="insight-icon success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Top Performer</h4>
+                            <p>Pune Municipal Corporation leads in development index with 94.2% score</p>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Attention Required</h4>
+                            <p>12 municipalities show declining budget utilization trends</p>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon info">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Growth Opportunity</h4>
+                            <p>Rural municipalities show 23% higher growth potential in digital initiatives</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Custom Scripts -->
+    <script src="../data/municipalities.js"></script>
+    <script src="../scripts/analytics.js"></script>
+</body>
+</html>
